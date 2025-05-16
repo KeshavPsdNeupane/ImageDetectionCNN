@@ -6,7 +6,7 @@ namespace GMNumber {
 	static constexpr float WINDOW_WIDTH = 800.0f;
 	static constexpr float WINDOW_HEIGHT = 600.0f;
 	static constexpr int MAX_FRAME_RATE = 60; ;
-	static constexpr float e = 2.7182818f;
+	static constexpr float learnRate = 0.001f;
 
 
 	static const std::string hiddenLocation("Data/Hidden/");
