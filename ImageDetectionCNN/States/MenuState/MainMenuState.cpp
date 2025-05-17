@@ -18,16 +18,20 @@ void MainMenu::Load() {
 	this->gameMenuTitle.setString("Mode Select");
 	this->gameMenuTitle.setCharacterSize(35);
 	bound = this->gameMenuTitle.getLocalBounds();
-	this->gameMenuTitle.setOrigin(bound.width / 2.0f, bound.height / 2.0f);
+	this->gameMenuTitle.setOrigin(bound.width * 0.5f, bound.height * 0.5f);
 	this->gameMenuTitle.setPosition(half.x, half.y * 0.5f);
 
 	for (unsigned int i = 0; i < texts.size(); ++i) {
 		auto& level = this->texts[i];
 		level.setFont(font);
+
 		if (i == 0) {
 			level.setString("Train");
 		}else if (i == 1) {
 			level.setString("Test");
+		}
+		else if (i == 2) {
+			level.setString("Cost Graph");
 		}
 		else if (i == texts.size() - 1) {
 			level.setString("Exit");
@@ -85,6 +89,9 @@ void MainMenu::Update(const float& dt) {
 			//------------
 		}
 		else if(this->IsPressedIndex == 1){
+
+		}
+		else if (this->IsPressedIndex == 2) {
 
 		}
 		else if (this->IsPressedIndex == texts.size() - 1 ) {

@@ -1,16 +1,34 @@
 #pragma once
 #include<cmath>
 #include<string>
+
+
 namespace GMNumber {
 	//  FOR WINDOWS 
 	static constexpr float WINDOW_WIDTH = 800.0f;
 	static constexpr float WINDOW_HEIGHT = 600.0f;
 	static constexpr int MAX_FRAME_RATE = 60; ;
-	static constexpr float learnRate = 0.001f;
+	static constexpr float LEARN_RATE = 0.001f;
+
+	static const std::string& HIDDEN_LAYER_FILES_LOCATION("Data/Hidden/");
+	static const std::string& OUTPUT_LAYER_FILES_LOCATION("Data/Output/");
+	static const std::string& WEIGHT("weight.txt");
+	static const std::string& BIAS("bias.txt");
 
 
-	static const std::string hiddenLocation("Data/Hidden/");
-	static const std::string outputLocation("Data/Output/");
+
+
+
+	static const std::string& PICTURE_DOCKER_PATH = "Asset/Pictures";
+	static const std::string& TEST_PNG_FOLDER_NAME("Test");
+	static const std::string& TRAINING_PNG_FOLDER_NAME("Training");
+
+
+
+
+
+
+
 };
 
 

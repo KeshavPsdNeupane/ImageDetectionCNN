@@ -9,7 +9,7 @@ private:
 	std::shared_ptr<StateData> stateData;
 	sf::Event event;
 	sf::Text gameMenuTitle;
-	std::array<sf::Text, 3> texts;
+	std::array<sf::Text, 4> texts;
 	short IsSetectedIndex;
 	short IsPressedIndex;
 

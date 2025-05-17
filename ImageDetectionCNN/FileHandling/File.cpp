@@ -46,7 +46,10 @@ std::vector<float> File::ReadBias(const std::string& filePath, int bi) {
     return bias;
 }
 
-void File::WriteWeight(const std::string& filePath, const std::vector<std::vector<float>>& weight) {
+void File::WriteWeight(
+    const std::string& filePath,
+    const std::vector<std::vector<float>>& weight) {
+
     if (weight.empty() || weight[0].empty()) {
         std::cerr << "Weight matrix is empty. for  = " << filePath << "\n";
         std::abort();
@@ -70,7 +73,10 @@ void File::WriteWeight(const std::string& filePath, const std::vector<std::vecto
     }
 }
 
-void File::WriteBias(const std::string& filePath, const std::vector<float>& bias) {
+void File::WriteBias(
+    const std::string& filePath,
+    const std::vector<float>& bias) {
+
     if (bias.size() == 0) {
         std::cerr << "bias matrix is empty. for  = " << filePath << "\n";
         std::abort();
