@@ -1,3 +1,7 @@
+# Ignore generated MNIST image folders
+mnist_train_images/
+mnist_test_images/
+
 # Prerequisites
 *.d
 
@@ -26,8 +30,8 @@
 *.out
 *.app
 
-#visual std
+# Visual Studio files
 *.vs
 
-#build
-build
+# Build directory
+build/
