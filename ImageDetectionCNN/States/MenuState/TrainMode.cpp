@@ -82,34 +82,46 @@ void TrainMode::ProcessInput() {
 	}
 }
 
+#include <sstream>
+#include <iomanip>
+
 void TrainMode::Update(const float& dt) {
 	UiUpdate();
-	if (this->isStopped) {return;}
+	if (this->isStopped) {
+		return;
+	}
 
 	this->currentImage = this->readImg.GetRandomTrainingPicture();
 	this->cnn.CnnOperate(false, this->currentImage, this->itAndLearn.learnRate);
 
-	auto& iter = this->itAndLearn.iteration;
+	auto& iter = ++this->itAndLearn.iteration;
 	auto& rate = this->itAndLearn.learnRate;
 
-	this->iterationText.setString("Iteration = " + std::to_string(++iter) +
-		"\nLearnRate = " + std::to_string(rate));
+	std::ostringstream oss;
+	oss << std::fixed << std::setprecision(10);
+	oss << "Iteration = " << iter << "\nLearnRate = " << rate;
+	this->iterationText.setString(oss.str());
 
-	if (iter < GMNumber::USE_0_01_LIMIT) {
-		rate = (iter < GMNumber::USE_0_1_LIIMIT) ? 0.1f : 0.01f;
+	if (iter < GMNumber::USE_0_1_LIIMIT) {
+		rate = 0.1f;
+	}
+	else if (iter == GMNumber::USE_0_1_LIIMIT) {
+		rate = 0.01f;
+	}
+	else if (iter == GMNumber::USE_0_01_LIMIT) {
+		rate = 0.001f;
 	}
 
-	if (iter % GMNumber::RATE_DECAY_OF_LEARN_RATE_ITERATION == 0) {
-		if (iter >= GMNumber::USE_0_01_LIMIT) {
-			rate *= GMNumber::DECAY_RATE;
-		}
-		file.WriteLearnRate(GMNumber::LEARN_RATE_LOCATION, this->itAndLearn);
+	if (iter >= GMNumber::USE_0_01_LIMIT &&
+		iter % GMNumber::RATE_DECAY_OF_LEARN_RATE_ITERATION == 0) {
+		rate *= GMNumber::DECAY_RATE;
 	}
 
 	if (iter % GMNumber::WAITING_TIME_FOR_WRITE == 0) {
 		this->cnn.SaveSignalExternalWieghts();
 	}
 }
+
 
 
 

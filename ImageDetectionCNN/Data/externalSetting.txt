@@ -1,2 +1,2 @@
-Iteration= 61569
-LearnRate= 0.01
+Iteration= 96785
+LearnRate= 0.000993956
