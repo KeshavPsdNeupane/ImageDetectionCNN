@@ -3,10 +3,14 @@
 #include"../Utility/Utility.h"
 
 struct ImageData{
-	int result;
-	sf::Image image;
+	int label;
+	std::vector<float> values;
 	sf::Texture texture;
 public:	
-	ImageData(): result(0),image(), texture(){}
-	ImageData(int result , sf::Image img , sf::Texture tex): result(result), image(std::move(img)),texture(std::move(tex)){}
+	ImageData(): label(-1), values(), texture(){}
+	ImageData(int label, std::vector<float> values, sf::Texture tex) :
+		label(label), values(std::move(values)), texture(std::move(tex)) {
+	}
 };
+
+

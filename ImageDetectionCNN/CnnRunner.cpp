@@ -7,10 +7,15 @@
 CnnRunner::CnnRunner() :
 	stateData(std::make_shared<StateData>()),
 	DELTA_TIME(0.0f) {
+
 	this->stateData->window->create(sf::VideoMode((int)(GMNumber::WINDOW_WIDTH),
 		(int)(GMNumber::WINDOW_HEIGHT)),
-		" Physic Engine", sf::Style::Close);
+		" CNN Engine", sf::Style::Close);
+
+	if (GMNumber::MAX_FRAME_RATE > 0) {
 	this->stateData->window->setFramerateLimit(GMNumber::MAX_FRAME_RATE);
+	}
+
 	this->stateData->stateManager->AddState(
 		std::make_unique<MainMenu>(this->stateData), true);
 	LoadAllAssets();

@@ -1,47 +1,60 @@
 #include "CNN.h"
 #include"../Utility/Utility.h"
-CNN::CNN(int batchSize, int inputSize, int hiddenSize, int outputSize):
-batchSize(batchSize),
-inputSize(inputSize),
-hiddenSize(hiddenSize),
-outputSize(outputSize),
-input(batchSize, 0.0f),
-hiddenWeight(hiddenSize, std::vector<float>(inputSize, 0.0f)),
-hiddenBias(hiddenSize, 0.0f), 
-outputWeight(outputSize, std::vector<float>(hiddenSize, 0.0f)),
-outputBias(outputSize, 0.0f){
+CNN::CNN(int batchSize, int inputSize, int hiddenSize, int outputSize, File& file) :
+	currentResult(-1),
+	currentCost(0.0f),
+	learnRate(GMNumber::LEARN_RATE),
+	batchSize(batchSize),
+	inputSize(inputSize),
+	hiddenSize(hiddenSize),
+	outputSize(outputSize),
+	file(file),
+	input(batchSize, 0.0f),
+	hiddenWeight(hiddenSize, std::vector<float>(inputSize, 0.0f)),
+	hiddenBias(hiddenSize, 0.0f),
+	outputWeight(outputSize, std::vector<float>(hiddenSize, 0.0f)),
+	outputBias(outputSize, 0.0f) {
+
 	ReadWeightAndBiases(GMNumber::WEIGHT, GMNumber::BIAS);
 }
 
 CNN::~CNN(){}
 
-void CNN::CnnOperate() {
+void CNN::CnnOperate(bool isTestingMode, const std::shared_ptr<ImageData> imgData, float learnRate) {
 	// Load input and weights/biases
-	int testAnswer = 3;
+	int testAnswer = imgData->label;
+	this->input = imgData->values;
+	this->learnRate = learnRate;
 
+
+	//std::cout << "label = "<< testAnswer << "\n";
 	// Forward pass: input -> hidden layer -> output layer with softmax
 	std::vector<float> A1 = Convulation(input, hiddenWeight, hiddenBias);
 	std::vector<float> final = ConvulationWithSoftmax(A1, outputWeight, outputBias);
+	this->currentCost = TotalCost(final, testAnswer);
+	this->probList = final;
+	FindResultNumber(final);
 
-	// Compute cost gradient at output layer (softmax + cross-entropy)
-	std::vector<float> softMaxCostFuncCosts = CostForSigmoid(final, testAnswer);
-	auto& outputBackError = softMaxCostFuncCosts; 
-	// Backpropagate error to hidden layer
-	std::vector<float> backPrpForHidden = BackPropError(this->outputWeight, outputBackError);
+	if (!isTestingMode) {
+		// Compute cost gradient at output layer (softmax + cross-entropy)
+		std::vector<float> softMaxCostFuncCosts = CostForSigmoid(final, testAnswer);
+		auto& outputBackError = softMaxCostFuncCosts;
+		// Backpropagate error to hidden layer
+		std::vector<float> backPrpForHidden = BackPropError(this->outputWeight, outputBackError);
 
-	// Update weights and biases for output layer
-	UpdateWeightAndBias(this->outputWeight, this->outputBias, softMaxCostFuncCosts, A1);
+		// Update weights and biases for output layer
+		UpdateWeightAndBias(this->outputWeight, this->outputBias, softMaxCostFuncCosts, A1);
 
-	// Compute activation cost for hidden layer (with sigmoid derivative)
-	std::vector<float> ActivationCOstHiddenLayer = ActivationCost(A1, backPrpForHidden);
+		// Compute activation cost for hidden layer (with sigmoid derivative)
+		std::vector<float> ActivationCOstHiddenLayer = ActivationCost(A1, backPrpForHidden);
 
-	// Update weights and biases for hidden layer
-	UpdateWeightAndBias(this->hiddenWeight, this->hiddenBias, ActivationCOstHiddenLayer, this->input);
+		// Update weights and biases for hidden layer
+		UpdateWeightAndBias(this->hiddenWeight, this->hiddenBias, ActivationCOstHiddenLayer, this->input);
+		//file.PrintB(final);
+		//std::cout << "Total cost = " << currentCost << "\n";
+		// Save updated weights and biases to files
+	}
 
-	file.PrintB(final);
-	std::cout << "Total cost = " << TotalCost(final, testAnswer) << "\n";
-	// Save updated weights and biases to files
-	WriteWeightAndBiases(GMNumber::WEIGHT, GMNumber::BIAS);
 }
 
 
@@ -99,7 +112,7 @@ std::vector<float> CNN::CostForSigmoid(
 	int it = result.size();
 	std::vector<float> cost (it, 0.0f) ;
 	for (int i = 0; i < it; ++i) {
-		cost[i] = SoftMaxPlusCostDerivative(result[i], ((i == y) ? 1.0f : 0.0f) );
+		cost[i] = SoftMaxPlusCostDerivative(result[i], ((i == y) ? 1.0f : 0.0f));
 	}
 	return cost;
 }
@@ -133,12 +146,11 @@ std::vector<float> CNN::ActivationCost(
 void CNN::UpdateWeightAndBias(std::vector<std::vector<float>>& weight, std::vector<float>& bias,
 	const std::vector<float>& cost, const std::vector<float>& input){
 	int m = cost.size(), n = input.size();
-	float rate = GMNumber::LEARN_RATE;
 	for (int i = 0; i < m; ++i) {
 		for (int j = 0; j < n; ++j) {
-			weight[i][j] -= ( rate * cost[i] * input[j]);
+			weight[i][j] -= ( this->learnRate * cost[i] * input[j]);
 		}
-		bias[i] -= (rate * cost[i]) ;
+		bias[i] -= (this->learnRate * cost[i]) ;
 	}
 	return;
 }
@@ -147,7 +159,6 @@ void CNN::ReadWeightAndBiases(
 	const std::string& weight,
 	const std::string& bias){
 
-	this->input = file.ReadBias("Data/input.txt", inputSize);
 	this->hiddenWeight = file.ReadWeight(GMNumber::HIDDEN_LAYER_FILES_LOCATION + weight, hiddenSize, inputSize);
 	this->hiddenBias = file.ReadBias(GMNumber::HIDDEN_LAYER_FILES_LOCATION + bias, hiddenSize);
 	this->outputWeight = file.ReadWeight(GMNumber::OUTPUT_LAYER_FILES_LOCATION + weight, outputSize, hiddenSize);
@@ -162,6 +173,17 @@ void CNN::WriteWeightAndBiases(
 	file.WriteBias(GMNumber::HIDDEN_LAYER_FILES_LOCATION + bias, this->hiddenBias);
 	file.WriteWeight(GMNumber::OUTPUT_LAYER_FILES_LOCATION + weight, this->outputWeight);
 	file.WriteBias(GMNumber::OUTPUT_LAYER_FILES_LOCATION + bias, this->outputBias);
+}
+
+void CNN::FindResultNumber(const std::vector<float> & final){
+	int size = final.size();
+	int smallestIndex = 0;
+	for (int i = 0; i < size; ++i) {
+		if (final[smallestIndex] < final[i]) {
+			smallestIndex = i;
+		}
+	}
+	this->currentResult = smallestIndex;
 }
 
 

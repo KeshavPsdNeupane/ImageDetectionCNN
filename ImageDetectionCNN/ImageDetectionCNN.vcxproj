@@ -153,23 +153,29 @@
     <ClCompile Include="CNN\CNN.cpp" />
     <ClCompile Include="CnnRunner.cpp" />
     <ClCompile Include="FileHandling\File.cpp" />
+    <ClCompile Include="Graph\Graph.cpp" />
     <ClCompile Include="ImageRead\ImageReading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="States\MenuState\MainMenuState.cpp" />
     <ClCompile Include="Resources\ResourceManager.cpp" />
     <ClCompile Include="StateObjects.h" />
     <ClCompile Include="States\StateManager.cpp" />
+    <ClCompile Include="States\MenuState\TestState.cpp" />
+    <ClCompile Include="States\MenuState\TrainMode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CNN\CNN.h" />
     <ClInclude Include="CnnRunner.h" />
     <ClInclude Include="FileHandling\File.h" />
+    <ClInclude Include="Graph\Graph.h" />
     <ClInclude Include="ImageRead\FileStruct.h" />
     <ClInclude Include="ImageRead\ImageReading.h" />
     <ClInclude Include="States\MenuState\MainMenuState.h" />
     <ClInclude Include="Resources\ResourceManager.h" />
     <ClInclude Include="States\StateManager.h" />
     <ClInclude Include="States\State.h" />
+    <ClInclude Include="States\MenuState\TestState.h" />
+    <ClInclude Include="States\MenuState\TrainMode.h" />
     <ClInclude Include="Utility\MyAssert.h" />
     <ClInclude Include="Utility\Utility.h" />
   </ItemGroup>

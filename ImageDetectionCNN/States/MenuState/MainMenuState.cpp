@@ -1,9 +1,18 @@
 #include "MainMenuState.h"
-#include "../../Utility/Utility.h"
+#include"TestState.h"
+#include"TrainMode.h"
+
+
 
 MainMenu::MainMenu(std::shared_ptr<StateData> stateData) :
 	stateData(stateData), event(),
-	IsSetectedIndex(0), IsPressedIndex(-1), texts() {
+	IsSetectedIndex(0), IsPressedIndex(-1), texts(){
+
+	/*std::vector<float> init = this->f.ReadCost("Data/cost.txt");
+	for (unsigned int i = 0; i < init.size(); ++i) {
+		this->mGraph.AddPoint(init[i]);
+	}*/
+
 }
 
 MainMenu::~MainMenu() {}
@@ -86,10 +95,10 @@ void MainMenu::Update(const float& dt) {
 
 	if (this->IsPressedIndex > -1) {
 		if (this->IsPressedIndex == 0) {
-			//------------
+			this->stateData->stateManager->AddState(std::make_unique<TrainMode>(this->stateData), true);
 		}
 		else if(this->IsPressedIndex == 1){
-
+			this->stateData->stateManager->AddState(std::make_unique<TestState>(this->stateData), true);
 		}
 		else if (this->IsPressedIndex == 2) {
 

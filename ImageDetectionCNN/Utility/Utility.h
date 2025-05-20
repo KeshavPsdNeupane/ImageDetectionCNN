@@ -7,13 +7,31 @@ namespace GMNumber {
 	//  FOR WINDOWS 
 	static constexpr float WINDOW_WIDTH = 800.0f;
 	static constexpr float WINDOW_HEIGHT = 600.0f;
-	static constexpr int MAX_FRAME_RATE = 60; ;
-	static constexpr float LEARN_RATE = 0.001f;
+	static constexpr int MAX_FRAME_RATE = 0; ;
+	static constexpr float LEARN_RATE = 0.0100015f;
+	static constexpr int WAITING_TIME_FOR_WRITE = 5000;
+
+
+	static constexpr int	USE_0_1_LIIMIT = 3000;
+	static constexpr int	USE_0_01_LIMIT = 80000;
+
+	static constexpr int RATE_DECAY_OF_LEARN_RATE_ITERATION = 100;
+	static constexpr float DECAY_RATE = 1.0f; //0.9999081432f;   //0.00867028
+	
+	
+
+
+
+
+
+
+
 
 	static const std::string& HIDDEN_LAYER_FILES_LOCATION("Data/Hidden/");
 	static const std::string& OUTPUT_LAYER_FILES_LOCATION("Data/Output/");
 	static const std::string& WEIGHT("weight.txt");
 	static const std::string& BIAS("bias.txt");
+	static const std::string& LEARN_RATE_LOCATION("Data/externalSetting.txt");
 
 
 

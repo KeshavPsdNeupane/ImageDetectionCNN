@@ -11,8 +11,8 @@ namespace fs = std::filesystem;
 class ImageReading{  
    const std::string& trainingFolderName;
    const std::string& testFolderName;
-   std::vector<ImageData> testData;
-   std::vector<ImageData> trainData;
+   std::vector<std::shared_ptr<ImageData>> testData;
+   std::vector<std::shared_ptr<ImageData>> trainData;
 
 
 
@@ -25,12 +25,14 @@ public:
 	void LoadTrainingPictures(const fs::path& dirPath);
 
 
-	ImageData& GetRandomTrainingPicture();
-	ImageData& GetRandomTestPicture();
+	std::shared_ptr<ImageData> GetRandomTrainingPicture();
+	std::shared_ptr<ImageData> GetRandomTestPicture();
 
 private:
 	int getRandomInt(int min, int max);
 	int CountDirectoryPicture(const fs::path& folderPath);
-	void LoadImages(const std::string& fullPath, std::vector<ImageData>& data);
+	void LoadImages(const std::string& fullPath, std::vector<std::shared_ptr<ImageData>>& data);
+	std::vector<float> ConvertImgToVector(sf::Image& img);
+
 
 };
