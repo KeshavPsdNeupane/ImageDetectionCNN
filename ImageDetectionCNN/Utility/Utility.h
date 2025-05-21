@@ -12,17 +12,11 @@ namespace GMNumber {
 	static constexpr int WAITING_TIME_FOR_WRITE = 5000;
 
 
-	static constexpr int	USE_0_1_LIIMIT = 3000;
-	static constexpr int	USE_0_01_LIMIT = 80000;
+	static constexpr int	USE_0_1_LIIMIT = 5000;
+	static constexpr int	USE_0_01_LIMIT = 100000;
 
-	static constexpr int RATE_DECAY_OF_LEARN_RATE_ITERATION = 200;
-	static constexpr float DECAY_RATE = 0.9999081432f;   //0.00867028
+	static constexpr int RATE_DECAY_OF_LEARN_RATE_ITERATION = 500;
 	
-	
-
-
-
-
 
 
 

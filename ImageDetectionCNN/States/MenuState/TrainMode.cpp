@@ -106,15 +106,14 @@ void TrainMode::Update(const float& dt) {
 		rate = 0.1f;
 	}
 	else if (iter == GMNumber::USE_0_1_LIIMIT) {
-		rate = 0.01f;
+		rate = 0.0105f;
 	}
 	else if (iter == GMNumber::USE_0_01_LIMIT) {
-		rate = 0.001f;
+		rate = 0.00105f;
 	}
 
-	if (iter >= GMNumber::USE_0_01_LIMIT &&
-		iter % GMNumber::RATE_DECAY_OF_LEARN_RATE_ITERATION == 0) {
-		rate *= GMNumber::DECAY_RATE;
+	if (iter % GMNumber::RATE_DECAY_OF_LEARN_RATE_ITERATION == 0) {
+		file.WriteLearnRate(GMNumber::LEARN_RATE_LOCATION, this->itAndLearn);
 	}
 
 	if (iter % GMNumber::WAITING_TIME_FOR_WRITE == 0) {
